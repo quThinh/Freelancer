@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import Product from '../models/productService.js';
 
 const checkId = (_id) => {
-    Product.findOne({ _id: new ObjectId(_id), type: "service" })
+    Product.findOne({ _id: new ObjectId(_id), type: "job" })
         .then(() => {
             return true;
         })
@@ -20,7 +20,7 @@ const createNew = (req, res, next) => {
     const providing_method = req.body.providing_method;
     const finish_estimated_time = req.body.finish_estimated_time;
     const lower_bound_fee = req.body.lower_bound_fee;
-    const type = "service";
+    const type = "job";
     const upper_bound_fee = req.body.finish_estimated_time;
     const image = req.body.finish_estimated_time;
     const expiration_time = req.body.finish_estimated_time;
@@ -54,8 +54,7 @@ const createNew = (req, res, next) => {
     });
     products.save()
         .then(() => {
-            console.log("call model successfully")
-            res.redirect('/homepage')
+            res.send({message: "Create Job successfully"})
         })
         .catch(err => {
             console.log(err)
@@ -64,9 +63,10 @@ const createNew = (req, res, next) => {
 }
 
 const getAll = (req, res, next) => {
-    Product.find({type: "service"})
+    Product.find({type: "job"})
         .then((result) => {
-            res.send({Service: result.json(), message: "Get all service successfully."})
+            console.log(result)
+            res.redirect('/homepage')
         })
         .catch(err => {
             console.log(err)
@@ -76,7 +76,7 @@ const getAll = (req, res, next) => {
 const getAllCurrentUser = (req, res, next) => {
     const user_id = req.user_id
 
-    Product.find({ user_id: user_id, type: "service" })
+    Product.find({ user_id: user_id, type: "job" })
         .then((result) => {
             res.status(200).send(result.json())
         })
@@ -85,36 +85,36 @@ const getAllCurrentUser = (req, res, next) => {
         })
 }
 
-const getUserServiceById = (req, res, next) => {
+const getUserJobById = (req, res, next) => {
     if (!req.user_id) {
         res.status(401).send({message: "Not Authorized"}) // not authorized
         return;
     }
-    const service_id = req.params.service_id
-    if (!checkId(service_id)) {
-        res.status(404).send({ message: "The service isn't exist!" })
+    const job_id = req.params.job_id
+    if (!checkId(job_id)) {
+        res.status(404).send({ message: "The job isn't exist!" })
         return;
     }
-    Product.find({ _id: new ObjectId(service_id), type: "service"})
+    Product.find({ _id: new ObjectId(job_id), type: "job" })
         .then((result) => {
             // res.redirect('/homepage')
-            res.send({ myServices: result })
+            res.send({ myJobs: result })
         })
         .catch(err => {
             console.log(err)
         })
 }
 
-const getOtherServiceById = (req, res, next) => {
-    const service_id = req.params.service_id
-    if (!checkId(service_id)) {
-        res.status(404).send({ message: "The service isn't exist!" })
+const getOtherJobById = (req, res, next) => {
+    const job_id = req.params.job_id
+    if (!checkId(job_id)) {
+        res.status(404).send({ message: "The job isn't exist!" })
         return;
     }
-    Product.find({ _id: new ObjectId(service_id), type: "service" })
+    Product.find({ _id: new ObjectId(job_id), type: "job" })
         .then((result) => {
             // console.log(réu)
-            res.send({ services: result })
+            res.send({ jobs: result })
             // res.redirect('/homepage')
         })
         .catch(err => {
@@ -124,16 +124,16 @@ const getOtherServiceById = (req, res, next) => {
 }
 
 const deleteById = (req, res, next) => {
-    const service_id = req.params.service_id
-    if (!checkId(service_id)) {
-        res.status(404).send({ message: "The service isn't exist!" })
+    const job_id = req.params.job_id
+    if (!checkId(job_id)) {
+        res.status(404).send({ message: "The job isn't exist!" })
         return;
     }
-    Product.deleteOne({ _id: new ObjectId(service_id), type: "service" })
+    Product.deleteOne({ _id: new ObjectId(job_id), type: "job" })
         .then((product) => {
             console.log(product)
             // if(!product){
-            //     res.status(404).send({message: "The service isn't exist"})
+            //     res.status(404).send({message: "The job isn't exist"})
             //     return;
             // }
             res.send({ message: "Delete sucessfully" })
@@ -144,12 +144,12 @@ const deleteById = (req, res, next) => {
         })
 }
 
-const browsingService = (req, res, next) => {
-    const service_id = req.params.service_id
-    Product.findOne({ _id: new ObjectId(service_id), type: "service" })
+const browsingjob = (req, res, next) => {
+    const job_id = req.params.job_id
+    Product.findOne({ _id: new ObjectId(job_id), type: "job" })
         .then((product) => {
             if (!product) {
-                res.status(404).send({ message: "The service isn't exist" })
+                res.status(404).send({ message: "The job isn't exist" })
                 return;
             }
             if (product.status == 0) {
@@ -167,12 +167,12 @@ const browsingService = (req, res, next) => {
 }
 
 const toggleById = (req, res, next) => {
-    const service_id = req.params.service_id;
-    if (!checkId(service_id)) {
-        res.status(404).send({ message: "The service isn't exist!" })
+    const job_id = req.params.job_id;
+    if (!checkId(job_id)) {
+        res.status(404).send({ message: "The job isn't exist!" })
         return;
     }
-    Product.findOne({ _id: new ObjectId(service_id), type: "service" }).then(product => {
+    Product.findOne({ _id: new ObjectId(job_id), type: "job" }).then(product => {
         if (product.status == 1) {
             product.status = 2
         }
@@ -190,9 +190,9 @@ const toggleById = (req, res, next) => {
 }
 
 const changeById = (req, res, next) => {
-    const _id = req.params.service_id;
+    const _id = req.params.job_id;
     if (!checkId(_id)) {
-        res.status(404).send({ message: "The service isn't exist!" })
+        res.status(404).send({ message: "The job isn't exist!" })
         return;
     }
     const name = req.body.name;
@@ -209,7 +209,7 @@ const changeById = (req, res, next) => {
     const expiration_time = req.body.finish_estimated_time;
     const status = req.body.status;
     const create_time = req.body.create_time;
-    Product.findOne({ _id: _id, type: "service" }).then(product => {
+    Product.findOne({ _id: _id, type: "job" }).then(product => {
         product.name = name;
         product.user_id = new ObjectId(user_id)
         product.category = category;
@@ -235,15 +235,15 @@ const changeById = (req, res, next) => {
         })
 }
 
-const services = {
+const jobs = {
     createNew,
     getAll,
     getAllCurrentUser,
-    getUserServiceById,
-    getOtherServiceById,
+    getUserJobById,
+    getOtherJobById,
     changeById,
     deleteById,
     toggleById,
-    browsingService
+    browsingjob
 }
-export default services;  
+export default jobs;  

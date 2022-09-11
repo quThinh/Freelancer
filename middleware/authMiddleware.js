@@ -27,8 +27,7 @@ export const checkUser = (req, res, next) => {
         verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
                 req.user_id = null;
-                console.log(err.message + "loi ne");
-                next();
+                res.send(err);
             } else {
                 console.log(decodedToken.user_id);
                 // req.user_id = decodedToken.user_id

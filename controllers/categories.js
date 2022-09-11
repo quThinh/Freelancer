@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 import Category from '../models/category.js';
 const createNew = (req, res, next) => {
     const name = req.body.name;
@@ -71,14 +72,15 @@ const changeById = (req, res, next) => {
     const updateImage = req.body.image;
     const updatePriority = req.body.priority;
     const updateStatus = req.body.status;
-    Category.getById(category_id).then(category => {
+    Category.findOne({_id : category_id}).then(category => {
+        console.log(category)
         category.name = updateName;
         category.slug = updateSlug;
         category.description = updateDescription;
         category.image = updateImage;
         category.priority = updatePriority;
         category.status = updateStatus;
-        return Category.save();
+        return category.save();
     })
     .then(() => {
         console.log("Update successfully")

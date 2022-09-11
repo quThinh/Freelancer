@@ -7,6 +7,8 @@ import routerAuth from './routes/auth.js'
 import routerCategories from './routes/categories.js'
 import routerSkills from './routes/skills.js'
 import routerServices from './routes/services.js'
+import routerJobs from './routes/jobs.js'
+import routerOffers from './routes/offers.js'
 import routerHomePage from './routes/homepage.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
@@ -51,14 +53,27 @@ app.use(cookieParser());
 
 app.post('/services', checkUser);
 app.get('/services/myService', checkUser);
-// app.get('/services/myService/detail/:service_id', checkUser);
+app.get('/services/myService/detail/:service_id', checkUser);
+app.put('/services/:service_id', checkUser);
 
+app.post('/jobs', checkUser);
+app.get('/jobs/myJob', checkUser);
+app.get('/jobs/myJob/detail/:job_id', checkUser);
+app.put('/jobs/:job_id', checkUser);
+
+app.get('/offers/:job_id', checkUser)
+app.post('/offers/:job_id', checkUser)
+app.patch('/offers/:job_id', checkUser)
+app.delete('/offers/:job_id', checkUser)
+app.get('/offers',checkUser)
 
 app.get('/homepage', routerHomePage);
 app.use(routerAuth);
 app.use(routerCategories)
 app.use(routerSkills)
 app.use(routerServices)
+app.use(routerJobs)
+app.use(routerOffers)
 
 
 // catch 404 and forward to error handler

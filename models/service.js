@@ -4,7 +4,7 @@ const {Schema} = mongoose
 const serviceSchema = new Schema ({
     user_id: {
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         required: true,
     },
     name: {
@@ -13,12 +13,12 @@ const serviceSchema = new Schema ({
     },
     category: {
         type: [Schema.Types.ObjectId],
-        ref: "category",
+        ref: "Category",
         required: true,
     },
     skill: {
         type: [Schema.Types.ObjectId],
-        ref: "skill",
+        ref: "Skill",
         required: true,
     },
     providing_method: {

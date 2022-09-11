@@ -48,7 +48,7 @@ const logIn = async (req, res, next) => {
         const user = await getUserPassword(emailLogIn);
         if (!user || user.status === 2 || user.del_flag)
             throw new Error(`Email ${emailLogIn} does not exist.`);
-        if (comparePassword(passwordLogIn, user.hashed_password))
+        if (!compareSync(passwordLogIn, user.hashed_password))
             throw new Error('Incorrect password');
         role = user.type;
         const {

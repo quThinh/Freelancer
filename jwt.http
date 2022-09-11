@@ -6,8 +6,8 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
 
 {
-    "email": "sas@eaczxsaample.com",
-    "password": "stâscring",
+    "email": "lalala",
+    "password": "lalala",
     "phone": "stringstri",
     "fullname": "string"
 }
@@ -17,53 +17,73 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
 
 {
-    "email": "sas@eaczxample.com",
-    "password" : "stâscring"
+    "email": "lalala",
+    "password" : "lalala"
 }
 ###
 
-GET http://localhost:5000/homepage
-Content-Type: text/html
-Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpYXQiOjE2NjE5MTQ5MDQsImV4cCI6MTY2MTkxNDkzNH0.slYK3rzeuROJsjWDtnJURsmQBoupMeIAxNZ8tjLvv7s
-
-### 
-POST http://localhost:5000/refreshToken HTTP/1.1
+PUT http://localhost:5000/categories/63182c3590ddb865c3e49c50
 Content-Type: application/json
+# Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpYXQiOjE2NjE5MTQ5MDQsImV4cCI6MTY2MTkxNDkzNH0.slYK3rzeuROJsjWDtnJURsmQBoupMeIAxNZ8tjLvv7s
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyNzk2NTcwLCJleHAiOjE2NjI4Mjk0MTJ9.GlYHudcHhkBB7d43JCrSsT6sFh4VFKcuoPyr6BkOtLo"
+  "name": "kkk",
+  "slug": "thuylinhkk",
+  "description": "093828382882",
+  "image": "sdfsfsd",
+  "priority": 2,
+  "status": 1
 }
-###
-GET http://localhost:5000/users
+### 
+PATCH  http://localhost:5000/services/approve/631c7929cec6ad197135df4e HTTP/1.1
+Content-Type: application/json
+### 
+DELETE  http://localhost:5000/services/631c77a53118c3a5bcf02fa9 HTTP/1.1
 
 ###
-POST  http://localhost:5000/services
+POST  http://localhost:5000/jobs/
 Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyNzk2NTcwLCJleHAiOjE2NjI4Mjk0MTJ9.GlYHudcHhkBB7d43JCrSsT6sFh4VFKcuoPyr6BkOtLo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZGFmOTEzZTlhNWU3YzQ3OWQ5ZGMzIiwiZW1haWwiOiJsYWxhbGEiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyODkwMzU0LCJleHAiOjE2NjI5MjMxOTZ9.oavEGtrHvHKTZhsMwhfCdmo_iYTHVlfQptXjU8iSNf8
 
 {
-  "name": "Driver sssinstall",
+  "name": "Driver install",
   "category": [
-    "628d9a48d0f5186097da588f"
+    "63182c3590ddb865c3e49c50"
   ],
   "skill": [
     "628d9e66cdb8ee9c670150a0"
   ],
-  "providing_method": ["string"],
+  "providing_method": ["kkk"],
   "finish_estimated_time": 11,
   "status":2,
-  "description": "string",
+  "description": "chaging",
   "lower_bound_fee": 11,
   "upper_bound_fee": 13,
   "image": [
     "string"
   ],
-  "type": "service",
   "expiration_time": "2021-04-06T22:13:19.776+00:00",
-  "create_time": "2021-04-06T22:13:19.776+00:00"
+  "create_time": "2021-04-06T22:13:19.776+00:00",
+  "sold_time": 33,
+  "rate": 10,
+  "number_of_rate": 11,
+  "required_level": ["required_level"],
+  "payment_method": "payment_method"
 }
 ###
-GET http://localhost:5000/services/others/detail/631c7929cec6ad197135df4e
+GET http://localhost:5000//offers
 Content-Type: application/json
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyNzk2NTcwLCJleHAiOjE2NjI4Mjk0MTJ9.GlYHudcHhkBB7d43JCrSsT6sFh4VFKcuoPyr6BkOtLo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyNzk2NTcwLCJleHAiOjE2NjI4Mjk0MTJ9.GlYHudcHhkBB7d43JCrSsT6sFh4VFKcuoPyr6BkOtLo
+###
+GET http://localhost:5000/services/myService/detail/63177da5311c3a5bcf02fa9
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyODgxMjU3LCJleHAiOjE2NjI5MTQwOTl9.l5sOVAzgJMgFP2W6-HkiWok_JqelUdhUl94vUfZKY2M
+###
+GET http://localhost:5000/services/myService/detail/63177da5311c3a5bcf02fa9
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyODgxMjU3LCJleHAiOjE2NjI5MTQwOTl9.l5sOVAzgJMgFP2W6-HkiWok_JqelUdhUl94vUfZKY2M
+###
+GET http://localhost:5000/services/myService/detail/63177da5311c3a5bcf02fa9
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxYWI2ZDY3NjkwOTZjNDcwYjI1MmU1IiwiZW1haWwiOiJzYXNAZWFjenhhbXBsZS5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYyODgxMjU3LCJleHAiOjE2NjI5MTQwOTl9.l5sOVAzgJMgFP2W6-HkiWok_JqelUdhUl94vUfZKY2M

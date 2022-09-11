@@ -56,7 +56,31 @@ const productSchema = new Schema({
     image: {
         type: [String],
         required: false,
-    }
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    sold_time: {
+        type: Number,
+        required: false,
+    },
+    rate: {
+        type: Number,
+        required: false,
+    },
+    number_of_rate: {
+        type: Number,
+        required: false,
+    },
+    required_level: {
+        type: [String],
+        required: false,
+    },
+    payment_method: {
+        type: String,
+        required: false,
+    },
 });
 
 export default mongoose.model('product', productSchema) ;
