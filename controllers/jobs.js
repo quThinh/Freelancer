@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import Product from '../models/productService.js';
-
+import agenda from '../agenda.js';
 const checkId = (_id) => {
     Product.findOne({ _id: new ObjectId(_id), type: "job" })
         .then(() => {
@@ -21,14 +21,9 @@ const createNew = (req, res, next) => {
     const finish_estimated_time = req.body.finish_estimated_time;
     const lower_bound_fee = req.body.lower_bound_fee;
     const type = "job";
-    const upper_bound_fee = req.body.finish_estimated_time;
-    const image = req.body.finish_estimated_time;
-    const expiration_time = req.body.finish_estimated_time;
-    const status = req.body.status;
-    const sold_time = req.body.sold_time;
-    const create_time = req.body.create_time;
-    const rate = req.body.rate;
-    const number_of_rate = req.body.number_of_rate;
+    const upper_bound_fee = req.body.upper_bound_fee;
+    const image = req.body.image;
+    const expiration_time = req.body.expiration_time;
     const required_level = req.body.required_level;
     const payment_method = req.body.payment_method;
     const products = new Product({
@@ -37,7 +32,6 @@ const createNew = (req, res, next) => {
         user_id: ObjectId(user_id),
         category: category,
         skill: skill,
-        status: status,
         description: description,
         providing_method: providing_method,
         finish_estimated_time: finish_estimated_time,
@@ -45,15 +39,16 @@ const createNew = (req, res, next) => {
         upper_bound_fee: upper_bound_fee,
         image: image,
         expiration_time: expiration_time,
-        create_time: create_time,
-        sold_time: sold_time,
-        rate: rate,
-        number_of_rate: number_of_rate,
         required_level: required_level,
-        payment_method: payment_method
+        payment_method: payment_method,
     });
     products.save()
-        .then(() => {
+        .then(async () => {
+            await agenda.schedule(
+                products.expiration_time,
+                'set product to expired',
+                { product_id: products._id },
+              );
             res.send({message: "Create Job successfully"})
         })
         .catch(err => {

@@ -23,6 +23,7 @@ const offerSchema = new Schema({
     },
     status: {
         type: Number,
+        default: 0,
         required: true,
     },
     introduction: {

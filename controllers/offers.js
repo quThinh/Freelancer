@@ -1,58 +1,59 @@
 import { ObjectId } from 'mongodb';
 import Offer from '../models/offer.js';
 import user from '../models/user.js';
+import Product from '../models/productService.js'
 
-const checkId = (_id) => {
-    Offer.findOne({ job_id: new ObjectId(_id)})
-        .then(() => {
-            return true;
-        })
-        .catch(() => {
-            return false;
-        })
-}
-
-const createNew = (req, res, next) => {
+const createNew = async (req, res, next) => {
+    const user_id = req.user_id;
     const job_id = req.params.job_id;
-    const provider_id = req.user_id;
-    const offer_price = req.body.offer_price;
-    const offer_finish_estimated_time = req.body.offer_finish_estimated_time;
-    const introduction = req.body.introduction;
-    const status = 0;
-    const create_time = new Date();
-    const offer = new Offer({
-        job_id: job_id,
-        provider_id: provider_id,
-        offer_price: offer_price,
-        offer_finish_estimated_time: offer_finish_estimated_time,
-        status: status,
-        introduction: introduction,
-        create_time: create_time,
-    });
-    offer.save()
-        .then(() => {
-            res.send({message: "Offer job successfully."})
-        })
-        .catch(err => {
-            res.send(err)
+    const job = await Product.findById(job_id)
+    if (job) {
+        const existing_offer = await Offer.findOne({ provider_id: user_id, job_id })
+        if (existing_offer) throw new Error('You already have an offer');
+        const provider_id = req.user_id;
+        const offer_price = req.body.offer_price;
+        const offer_finish_estimated_time = req.body.offer_finish_estimated_time;
+        const introduction = req.body.introduction;
+        const create_time = new Date();
+        const offer = new Offer({
+            job_id: job_id,
+            provider_id: provider_id,
+            offer_price: offer_price,
+            offer_finish_estimated_time: offer_finish_estimated_time,
+            introduction: introduction,
+            create_time: create_time,
         });
-    return
+        offer.save()
+            .then(() => {
+                res.send({ message: "Offer job successfully." })
+            })
+            .catch(err => {
+                res.send(err)
+            });
+        return offer;
+    }
+    throw new Error('Job not found');
 }
 
-const getAllCurrentJob = (req, res, next) => {
+const getAllCurrentJob = async (req, res, next) => {
     const job_id = req.params.job_id
-    Product.find({job_id: job_id})
-        .then((result) => {
-            res.status(200).send(result.json())
-        })
-        .catch(err => {
-            res.status(404).send({message: "Can not find offer!"})
-        })
+    const job = await Product.findById(job_id)
+    if (job) {
+        Offer.find({ job_id: new ObjectId(job_id) })
+            .then((offers) => {
+                res.send({ offers: offers, message: "Get all offers of this job successfully." })
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+        return;
+    }
+    throw new Error('Job not found')
 }
 
 const getAllUserOffer = (req, res, next) => {
     const user_id = req.user_id;
-    Offer.find({user_id: user_id})
+    Offer.find({ user_id: user_id })
         .then((result) => {
             // res.redirect('/homepage')
             res.send({ myOffers: result, message: "Get all offer successfully" })
@@ -95,7 +96,7 @@ const changeById = (req, res, next) => {
     const status = req.body.status;
     const introduction = req.body.introduction;
     const create_time = req.body.create_time;
-    Offer.findOne({ job_id: job_id}).then(offer => {
+    Offer.findOne({ job_id: job_id }).then(offer => {
         offer.provider_id = provider_id;
         offer.offer_price = offer_price;
         offer.offer_finish_estimated_time = offer_finish_estimated_time;
@@ -105,7 +106,7 @@ const changeById = (req, res, next) => {
         return offer.save();
     })
         .then(() => {
-            res.status(200).send({message: "Update offer successfully"})
+            res.status(200).send({ message: "Update offer successfully" })
         }
         )
         .catch((err) => {

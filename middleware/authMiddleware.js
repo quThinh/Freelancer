@@ -34,6 +34,7 @@ export const checkUser = (req, res, next) => {
                 await User.findOne({ _id: new ObjectId(String(decodedToken.user_id))})
                 .then((user) => {
                     req.user_id = user._id;
+                    req.user_type = user.type;
                 })
                 .catch((err) => {
                     console.log(err)
@@ -44,7 +45,8 @@ export const checkUser = (req, res, next) => {
     }
     else {
         req.user_id = null;
-        next();
+        res.status(401).send({message: "Unauthorized"})
+        return;
     }
 }
 

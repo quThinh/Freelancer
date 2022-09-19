@@ -39,6 +39,7 @@ const productSchema = new Schema({
     },
     status: {
         type: Number,
+        default: 0,
         required: true,
     },
     type: {
@@ -47,6 +48,7 @@ const productSchema = new Schema({
     },
     create_time: {
         type: Date,
+        default: Date.now(),
         required: true,
     },
     expiration_time: {
@@ -63,14 +65,17 @@ const productSchema = new Schema({
     },
     sold_time: {
         type: Number,
+        default: 0,
         required: false,
     },
     rate: {
         type: Number,
+        default: 0,
         required: false,
     },
     number_of_rate: {
         type: Number,
+        default: 0,
         required: false,
     },
     required_level: {

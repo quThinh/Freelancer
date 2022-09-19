@@ -9,11 +9,12 @@ import routerSkills from './routes/skills.js'
 import routerServices from './routes/services.js'
 import routerJobs from './routes/jobs.js'
 import routerOffers from './routes/offers.js'
+import routerOrders from './routes/orders.js'
 import routerHomePage from './routes/homepage.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
-import jwt from 'jsonwebtoken'
-import bodyParser from 'body-parser'
+import Agenda from 'agenda'
+const agenda = new Agenda({db: {address: "mongodb+srv://quangthinhhigh:vladimir1@cluster0.ygznx4h.mongodb.net/Freelancer?retryWrites=true&w=majority"}})
 var app = express();
 dotenv.config();
 
@@ -27,30 +28,6 @@ app.use(cookieParser());
 // const buffer = readFileSync(new URL('./public', import.meta.url));
 
 
-// function authenToken(req, res, next) {
-//   const authorizationHeader = req.headers['authorization']
-//   const token = authorizationHeader.split(' ')[1]
-//   if (!token) res.sendStatus(401);
-
-//   jwt.verify(token, process.env.ACCESS_TOKEN, (err, data) => {
-//     console.log(err, data)
-//     if (err) res.sendStatus(403);
-//     next();
-//   })
-// }
-
-// app.post('/refreshToken', (req, res, next) => {
-//   const refreshToken = req.body.token;
-//   if (!refreshToken) res.sendStatus(401); //unauthorized
-//   if (!refreshTokens.include(refreshToken)) res.sendStatus(403) //forbiden
-//   jwt.verify(refreshTokens, process.env.REFRESH_TOKEN, (err, data) => {
-//     console.log(err, data)
-//     if (err) res.sendStatus(403);
-//     const accessToken = jwt.sign({userName: data.userName}, process.env.ACCESS_TOKEN, {expiresIn: '30s'})
-//     res.json({accessToken})
-//   })
-// })
-
 app.post('/services', checkUser);
 app.get('/services/myService', checkUser);
 app.get('/services/myService/detail/:service_id', checkUser);
@@ -63,9 +40,20 @@ app.put('/jobs/:job_id', checkUser);
 
 app.get('/offers/:job_id', checkUser)
 app.post('/offers/:job_id', checkUser)
-app.patch('/offers/:job_id', checkUser)
-app.delete('/offers/:job_id', checkUser)
-app.get('/offers',checkUser)
+// app.patch('/offers/:job_id', checkUser)
+// app.delete('/offers/:job_id', checkUser)
+// app.get('/offers',checkUser)
+
+app.get('/order', checkUser)
+app.post('/order/acceptOffer/:job_offer_id', checkUser)
+app.post('/order/cancel/:order_id', checkUser)
+app.post('/order/conplete/:order_id', checkUser)
+app.post('/order/complain/:order_id', checkUser)
+app.get('/order/:order_id', checkUser)
+app.post('/order/confirm/:order_id', checkUser)
+app.post('/order/request/:service_id', checkUser)
+app.post('/order/finishMentor/:order_id', checkUser)
+app.get('/order/all', checkUser)
 
 app.get('/homepage', routerHomePage);
 app.use(routerAuth);
@@ -74,6 +62,7 @@ app.use(routerSkills)
 app.use(routerServices)
 app.use(routerJobs)
 app.use(routerOffers)
+app.use(routerOrders)
 
 
 // catch 404 and forward to error handler
