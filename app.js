@@ -10,7 +10,8 @@ import routerServices from './routes/services.js'
 import routerJobs from './routes/jobs.js'
 import routerOffers from './routes/offers.js'
 import routerOrders from './routes/orders.js'
-import routerHomePage from './routes/homepage.js'
+import routerWallets from './routes/wallets.js'
+import routerAdminBanks from './routes/adminBanks.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
 import Agenda from 'agenda'
@@ -55,7 +56,19 @@ app.post('/order/request/:service_id', checkUser)
 app.post('/order/finishMentor/:order_id', checkUser)
 app.get('/order/all', checkUser)
 
-app.get('/homepage', routerHomePage);
+app.post('/wallet/my', checkUser)
+app.get('/wallet/:user_id', checkUser)
+app.get('/wallet', checkUser)
+app.get('/wallet/deposit', checkUser)
+// app.get('/wallet/withdraw', checkUser)
+// app.put('/wallet/lock/:user_id', checkUser)
+// app.patch('/wallet/unlock/{user_id}', checkUser)
+
+app.get('/admin_bank/my', checkUser)
+app.post('/admin_bank/create', checkUser)
+app.delete('/admin_bank/delete/:id', checkUser)
+app.get('/admin_bank/all', checkUser)
+
 app.use(routerAuth);
 app.use(routerCategories)
 app.use(routerSkills)
@@ -63,6 +76,8 @@ app.use(routerServices)
 app.use(routerJobs)
 app.use(routerOffers)
 app.use(routerOrders)
+app.use(routerWallets)
+app.use(routerAdminBanks)
 
 
 // catch 404 and forward to error handler

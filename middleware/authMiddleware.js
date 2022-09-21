@@ -27,7 +27,7 @@ export const checkUser = (req, res, next) => {
         verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
                 req.user_id = null;
-                res.send(err);
+                res.status(401).send(err);
             } else {
                 console.log(decodedToken.user_id);
                 // req.user_id = decodedToken.user_id
@@ -35,11 +35,11 @@ export const checkUser = (req, res, next) => {
                 .then((user) => {
                     req.user_id = user._id;
                     req.user_type = user.type;
+                    next();
                 })
                 .catch((err) => {
                     console.log(err)
                 });
-                next();
             }
         })
     }
