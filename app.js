@@ -12,6 +12,7 @@ import routerOffers from './routes/offers.js'
 import routerOrders from './routes/orders.js'
 import routerWallets from './routes/wallets.js'
 import routerAdminBanks from './routes/adminBanks.js'
+import routerTransaction from './routes/transactions.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
 import Agenda from 'agenda'
@@ -69,6 +70,17 @@ app.post('/admin_bank/create', checkUser)
 app.delete('/admin_bank/delete/:id', checkUser)
 app.get('/admin_bank/all', checkUser)
 
+app.get('/transaction/external', checkUser)
+app.get('/transaction/internal', checkUser)
+app.get('/transaction', checkUser)
+app.get('/transaction/:transaction_id', checkUser)
+app.get('/transaction/order/:order_id', checkUser)
+app.post('/transaction/accept/:transaction_id', checkUser)
+app.post('/transaction/accept_withdraw/:transaction_id', checkUser)
+app.post('/transaction/accept_deposit/:transaction_id', checkUser)
+app.get('/transaction/deposits', checkUser)
+
+
 app.use(routerAuth);
 app.use(routerCategories)
 app.use(routerSkills)
@@ -78,6 +90,7 @@ app.use(routerOffers)
 app.use(routerOrders)
 app.use(routerWallets)
 app.use(routerAdminBanks)
+app.use(routerTransaction)
 
 
 // catch 404 and forward to error handler

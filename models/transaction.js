@@ -31,6 +31,10 @@ const transactionSchema = new Schema({
         default: 0,
         required: true,
     },
+    admin_id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+    },
     transaction_time: {
         type: Date,
         default: Date.now(),
