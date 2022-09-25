@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 const {Schema} = mongoose
@@ -8,7 +9,12 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
+    },
+    avatar: {
+        type: String,
+        required: false
     },
     phone: {
         type: String,
@@ -22,6 +28,10 @@ const userSchema = new Schema({
     },
     address: {
         type: String,
+    },
+    sex: {
+        type: String,
+        required: false,
     },
     type: {
         type: String,
@@ -45,9 +55,45 @@ const userSchema = new Schema({
     },
     api_key: {
         type: String,
-        required: true,
-    }
-
+        required: false,
+    },
+    referal_code: {
+        type: String,
+        required: false,
+    },
+    category: {
+        type: [ObjectId],
+        ref: 'Category',
+        required: false,
+    },
+    skill: {
+        type: [ObjectId],
+        required: false,
+    },
+    successful_rate: {
+        type: Number,
+        required: false,
+    },
+    introduction: {
+        type: String,
+        required: false,
+    },
+    sold_time: {
+        type: Number,
+        required: false,
+    },
+    rate_star: {
+        type: Number,
+        required: false,
+    },
+    rate_number: {
+        type: Number,
+        required: false,
+    },
+    social_media_contact: {
+        type: [Object],
+        required: false,
+    },
 });
 
 export default mongoose.model('User', userSchema) ;

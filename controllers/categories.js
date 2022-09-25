@@ -20,8 +20,7 @@ const createNew = (req, res, next) => {
     });
     categories.save()
         .then(() => {
-            console.log("call model successfully")
-            res.redirect('/homepage')
+            console.log("create successfully")
         })
         .catch(err => {
             console.log(err)
@@ -33,7 +32,6 @@ const getAll = (req, res, next) => {
     Category.find()
         .then((result) => {
             console.log(result)
-            res.redirect('/homepage')
         })
         .catch(err => {
             console.log(err)
@@ -43,9 +41,8 @@ const getAll = (req, res, next) => {
 const getById = (req, res, next) => {
     const category_id = req.params.category_id
     Category.find({ _id: new ObjectId(category_id) })
-        .then(() => {
-            console.log("call model successfully")
-            res.redirect('/homepage')
+        .then((category) => {
+            res.send(category)
         })
         .catch(err => {
             console.log(err)
@@ -56,8 +53,7 @@ const deleteById = (req, res, next) => {
     const category_id = req.params.category_id
     User.deleteOne({_id: new ObjectId(category_id)})
         .then(() => {
-            console.log("call model successfully")
-            res.redirect('/homepage')
+            console.log("delete successfully")
         })
         .catch(err => {
             console.log(err + "loi roi")

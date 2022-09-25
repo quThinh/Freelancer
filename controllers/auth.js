@@ -4,8 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import referralCodes from 'referral-codes';
 import Wallet from '../models/wallet.js'
 import pkg from 'jsonwebtoken';
+import pkgSession from 'mongoose'
+import wallet from '../models/wallet.js';
+import WalletStatus from '../models/walletStatus.js';
+const { startSession } = pkgSession;
 const { sign, verify } = pkg;
-const comparePassword = (password, hashedPassword) => {
+export const comparePassword = (password, hashedPassword) => {
     return compareSync(password, hashedPassword);
 }
 
@@ -108,7 +112,7 @@ const refreshTokens = async (req, res, next) => {
     }
 }
 
-const hashPassword = (password, rounds) => {
+export const hashPassword = (password, rounds) => {
     return hashSync(password, rounds);
 }
 
@@ -126,52 +130,78 @@ const register = async (req, res, next) => {
     const api_key = uuidv4();
     let referralCode = referralCodes.generate({ length: 8 });
 
-    const user = new User(
-        {
-            email: email,
-            phone: phone,
-            fullname: fullname,
-            hashed_password: hashed_password,
-            type: type,
-            del_flag: del_flag,
-            status: status,
-            create_time: create_time,
-            active_token: active_token,
-            api_key: api_key,
-            //   referal_code: referralCode,
+    const session = await startSession();
+    session.startTransaction();
+
+    try {
+      let dReferral = await User.findOne(
+        { referal_code: referralCode, type: 'client' },
+        null,
+        { session },
+      );
+      while (dReferral) {
+        try {
+          referralCode = referralCodes.generate({ length: 8 });
+
+          // eslint-disable-next-line no-await-in-loop
+          dReferral = await User.findOne(
+            { referal_code: referralCode, type: 'client'},
+            null,
+            { session },
+          );
+        }catch(e){
+          console.log(e);
         }
-    );
-    const userCreated = await user.save();
+      }
 
-    if (!userCreated) {
+      const user = new User(
+        {
+          email,
+          phone,
+          fullname,
+          hashed_password,
+          type,
+          del_flag,
+          status,
+          create_time,
+          active_token,
+          api_key,
+          referal_code: referralCode,
+        },
+        { session },
+      );
+      const userCreated = await user.save({ session });
+
+      if (!userCreated) {
         throw new Error('User not created');
-    }
+      }
 
-    // initiate wallet
-    const wallet = await Wallet.create(
+      const currentWallet = await wallet.create(
         [
-            {
-                user_id: userCreated._id,
-                available_balance: 0,
-                balance: 0,
-                create_time,
-                status: 1,
-            },
-        ]
-    );
+          {
+            user_id: userCreated._id,
+            balance: 0,
+            create_time,
+            status: WalletStatus.ACTIVATED,
+          },
+        ],
+        { session },
+      );
 
-    if (!wallet || wallet.length === 0) {
+      if (!currentWallet || currentWallet.length === 0) {
         throw new Error('Wallet not created');
+      }
+
+      if (userCreated) {
+        res.redirect(`${process.env.WEBSITE_DOMAIN_PATH}/user/register/verify/${userCreated.active_token}`);
+      }
+      await session.commitTransaction();
+      await session.endSession();
+    } catch (e) {
+      await session.abortTransaction();
+      await session.endSession();
+      throw new BadRequestError(e.message);
     }
-    //   if (userCreated) {
-    //     await sendRegisterUserVerifyEmailQueue.add({
-    //       user_email: userCreated.email,
-    //       user_fullname: userCreated.fullname,
-    //       redirect_link: `${process.env.WEBSITE_DOMAIN_PATH}/user/register/verify/${userCreated.active_token}`,
-    //     });
-    //   }
-    res.send({ "status": 200 });
-    return;
 }
 
 

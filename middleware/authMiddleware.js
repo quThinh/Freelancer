@@ -50,4 +50,32 @@ export const checkUser = (req, res, next) => {
     }
 }
 
-export default {requireAuth, checkUser};
+export const getUserByEmail = (req, res, next) => {
+    let token = req.headers.authorization
+    if (token) {
+        token = token.split(" ")[1]
+        verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            if (err) {
+                req.emailLogIn = null;
+                res.status(401).send(err);
+            } else {
+                console.log(decodedToken.user_id);
+                // req.user_id = decodedToken.user_id
+                await User.findOne({ _id: new ObjectId(String(decodedToken.emailLogIn))})
+                .then((user) => {
+                    req.emailLogIn = user;
+                    next();
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
+            }
+        })
+    }
+    else {
+        req.emailLogIn = null;
+        res.status(401).send({message: "Email isn't exist!"});
+        return;
+    }
+}
+// export default {requireAuth, checkUser};

@@ -13,6 +13,8 @@ import routerOrders from './routes/orders.js'
 import routerWallets from './routes/wallets.js'
 import routerAdminBanks from './routes/adminBanks.js'
 import routerTransaction from './routes/transactions.js'
+import routerComplain from './routes/complaints.js'
+import routerUser from './routes/users.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
 import Agenda from 'agenda'
@@ -80,6 +82,20 @@ app.post('/transaction/accept_withdraw/:transaction_id', checkUser)
 app.post('/transaction/accept_deposit/:transaction_id', checkUser)
 app.get('/transaction/deposits', checkUser)
 
+app.get('/orderComplain', checkUser)
+app.get('/orderComplain/order/:orderId', checkUser)
+app.get('/orderComplain/my', checkUser)
+app.put('/orderComplain/:orderComplainId/resolve', checkUser)
+app.get('/orderComplain/:orderComplainId/detail', checkUser)
+
+app.get('/users', checkUser)
+app.patch('/users/change/password',checkUser)
+app.put('/users/change/profile',checkUser)
+app.post('/users/verify/:active_token', checkUser)
+// router.get('/users/forgot-password', users.resetPassword)
+// router.post('/users/forgot-password/verify/:active_token', users.checkActiveToken)
+// router.post('/users/forgot-password/verify/updatePassword', users.updatePassword)
+app.post('/users/createCrmUser', checkUser)
 
 app.use(routerAuth);
 app.use(routerCategories)
@@ -91,6 +107,8 @@ app.use(routerOrders)
 app.use(routerWallets)
 app.use(routerAdminBanks)
 app.use(routerTransaction)
+app.use(routerComplain)
+app.use(routerUser)
 
 
 // catch 404 and forward to error handler
