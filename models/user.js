@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
-const {Schema} = mongoose
+const { Schema } = mongoose
 const userSchema = new Schema({
     fullname: {
         type: String,
@@ -66,10 +66,14 @@ const userSchema = new Schema({
         ref: 'Category',
         required: false,
     },
-    skill: {
-        type: [ObjectId],
-        required: false,
-    },
+    skill: [{
+        name: {
+            type: String,
+        },
+        slug: {
+            type: String,
+        }
+    }],
     successful_rate: {
         type: Number,
         required: false,
@@ -90,11 +94,15 @@ const userSchema = new Schema({
         type: Number,
         required: false,
     },
-    social_media_contact: {
-        type: [Object],
-        required: false,
-    },
+    social_media_contact: [{
+        link: {
+            type: String,
+        },
+        media: {
+            type: String,
+        }
+    }],
 });
 
-export default mongoose.model('User', userSchema) ;
+export default mongoose.model('User', userSchema);
 

@@ -33,8 +33,8 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
 
 {
-    "email": "kakakaka",
-    "password": "kakakaka",
+    "email": "hihi",
+    "password": "hihi",
     "phone": "stringstri",
     "fullname": "string"
 }
@@ -75,44 +75,44 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZ
   "note":"lalala"
 }
 ###
-POST http://localhost:5000/offers/631db7f597a321c3249a789c
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZGFmOTEzZTlhNWU3YzQ3OWQ5ZGMzIiwiZW1haWwiOiJsYWxhbGEiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYzNTUzMTU1LCJleHAiOjE2NjM1ODU5OTd9.ynEiFCF7C9F_0kG7prL07GraBhCIRielaXKhm9URydI
-
-{
-  "offer_price":"100",
-  "offer_finish_estimated_time": "10",
-  "introduction":"lala"
-} 
-###
-POST http://localhost:5000/order/complain/6327f33edcd794e6a073f5c0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZGFmOTEzZTlhNWU3YzQ3OWQ5ZGMzIiwiZW1haWwiOiJsYWxhbGEiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYzNTUzMTU1LCJleHAiOjE2NjM1ODU5OTd9.ynEiFCF7C9F_0kG7prL07GraBhCIRielaXKhm9URydI
-
-{
-  "complain": "too bad"
-}
-###
-GET http://localhost:5000/order/all?page=1&limit=10
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MzU4MjYzMiwiZXhwIjoxNjYzNjE1NDc0fQ.BCpOKpsDisUFJBgjKR23lju9GkLGzucrJOLb2zzRCyw
-###
-GET  http://localhost:5000/transaction/internal
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyM2ZlNGE5NTgwMzVkZTI0MzNmYmMxIiwiZW1haWwiOiJrYWtha2EiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjY0MDA2MzYyLCJleHAiOjE2NjQwMzkyMDR9.dQ4Yg5SgbZt55XP3KTtMk5q3sbllxL3hE5m5V8tT2yY
-###
-GET  http://localhost:5000/transaction/external
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDAxMDU0NCwiZXhwIjoxNjY0MDQzMzg2fQ.v6BmDb2DdgIHxVHgG6zA99P5MpfiShIbu3yiNZk8Ivc
-###
-GET  http://localhost:5000/transaction/632816e03e7ee100ed8b5152
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDAxMDU0NCwiZXhwIjoxNjY0MDQzMzg2fQ.v6BmDb2DdgIHxVHgG6zA99P5MpfiShIbu3yiNZk8Ivc
-###
-POST  http://localhost:5000/transaction/accept/632816e03e7ee100ed8b5154
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDAxMDU0NCwiZXhwIjoxNjY0MDQzMzg2fQ.v6BmDb2DdgIHxVHgG6zA99P5MpfiShIbu3yiNZk8Ivc
-###
 POST  http://localhost:5000/user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDAxMDU0NCwiZXhwIjoxNjY0MDQzMzg2fQ.v6BmDb2DdgIHxVHgG6zA99P5MpfiShIbu3yiNZk8Ivc
+
+{
+  "email": "hihi",
+  "password": "hihi",
+  "phone": "hihi",
+  "fullname": "hihi"
+}
+###
+PUT http://localhost:5000/users/change/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMzMTIwZmI4NWYzOGZkMTY5OTYxNjkxIiwiZW1haWwiOiJoaWhpIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY2NDE2NDA5NSwiZXhwIjoxNjY0MTk2OTM3fQ.TeMlUlv5lcYIDdkP22vZAbK2kLsoqSn_qgVujj-oal8
+
+{
+  "phone": "string",
+  "fullname": "string",
+  "birthday": "Mon Sep 26 2022 10:29:27 GMT+0700 (Indochina Time)",
+  "address": "string",
+  "introduction": "string",
+  "category": [
+    "cecFbF24a20AbCd56cC52D68"
+  ],
+  "skill": [
+    {
+      "name": "string",
+      "slug": "string"
+    }
+  ],
+  "social_media_contact": [
+    {
+      "link": "string",
+      "media": "string"
+    }
+  ]
+}
+###
+GET  http://localhost:5000/orderComplain/order/6327f33edcd794e6a073f5c0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDE4MjYzMCwiZXhwIjoxNjY0MjE1NDcyfQ.PQnGndJIsOtf8Dp1f8lH9AuG0FOFGzCJtYNMYD62qdo
+

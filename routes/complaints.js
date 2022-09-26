@@ -7,7 +7,7 @@ router.get('/orderComplain', complaint.complaintsInfo)
 router.get('/orderComplain/order/:orderId', complaint.orderComplaints)
 router.get('/orderComplain/my', complaint.myComplaints)
 router.put('/orderComplain/:orderComplainId/resolve', complaint.resolvedComplaint)
-// router.get('/orderComplain/:orderComplainId/detail', complaint.specificComplaint)
+router.get('/orderComplain/:orderComplainId/detail', complaint.specificComplaint)
 
 // router.get('/login', users);
 

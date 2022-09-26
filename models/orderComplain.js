@@ -12,6 +12,11 @@ const orderComplainSchema = new Schema({
         ref: "User",
         required: true,
     },
+    admin_id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
     complain: {
         type: String,
         required: true,
@@ -22,7 +27,7 @@ const orderComplainSchema = new Schema({
     },
     create_time: {
         type: Date,
-        default: Date.now(),
+        default: new Date(),
         required: true,
     }
 });

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "build": "webpack --config=Scripts/config/webpack.prod.js"
+    "dev":"nodemon app"
   },
   "dependencies": {
     "agenda": "^4.3.0",

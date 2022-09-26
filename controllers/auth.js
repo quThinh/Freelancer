@@ -108,7 +108,7 @@ const refreshTokens = async (req, res, next) => {
 
         const { user_id, email, role } = tokenPayload;
     } catch (e) {
-        throw new BadRequestError('Email or password is incorrect.');
+        throw new Error('Email or password is incorrect.');
     }
 }
 
@@ -135,17 +135,16 @@ const register = async (req, res, next) => {
 
     try {
       let dReferral = await User.findOne(
-        { referal_code: referralCode, type: 'client' },
+        { referal_code: referralCode[0], type: 'client' },
         null,
         { session },
       );
       while (dReferral) {
         try {
           referralCode = referralCodes.generate({ length: 8 });
-
           // eslint-disable-next-line no-await-in-loop
           dReferral = await User.findOne(
-            { referal_code: referralCode, type: 'client'},
+            { referal_code: referralCode[0], type: 'client'},
             null,
             { session },
           );
@@ -166,7 +165,7 @@ const register = async (req, res, next) => {
           create_time,
           active_token,
           api_key,
-          referal_code: referralCode,
+          referal_code: referralCode[0],
         },
         { session },
       );
@@ -200,7 +199,7 @@ const register = async (req, res, next) => {
     } catch (e) {
       await session.abortTransaction();
       await session.endSession();
-      throw new BadRequestError(e.message);
+      throw new Error(e.message);
     }
 }
 
