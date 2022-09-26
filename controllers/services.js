@@ -66,7 +66,7 @@ const createNew = (req, res, next) => {
 const getAll = (req, res, next) => {
     Product.find({type: "service"})
         .then((result) => {
-            res.send({Service: result.json(), message: "Get all service successfully."})
+            res.send(result)
         })
         .catch(err => {
             console.log(err)
@@ -98,7 +98,7 @@ const getUserServiceById = (req, res, next) => {
     Product.find({ _id: new ObjectId(service_id), type: "service"})
         .then((result) => {
             // res.redirect('/homepage')
-            res.send({ myServices: result })
+            res.send(result)
         })
         .catch(err => {
             console.log(err)
@@ -113,9 +113,7 @@ const getOtherServiceById = (req, res, next) => {
     }
     Product.find({ _id: new ObjectId(service_id), type: "service" })
         .then((result) => {
-            // console.log(réu)
-            res.send({ services: result })
-            // res.redirect('/homepage')
+            res.send(result)
         })
         .catch(err => {
             console.log(err)

@@ -81,10 +81,6 @@ const getAllCurrentUser = (req, res, next) => {
 }
 
 const getUserJobById = (req, res, next) => {
-    if (!req.user_id) {
-        res.status(401).send({message: "Not Authorized"}) // not authorized
-        return;
-    }
     const job_id = req.params.job_id
     if (!checkId(job_id)) {
         res.status(404).send({ message: "The job isn't exist!" })
@@ -93,7 +89,7 @@ const getUserJobById = (req, res, next) => {
     Product.find({ _id: new ObjectId(job_id), type: "job" })
         .then((result) => {
             // res.redirect('/homepage')
-            res.send({ myJobs: result })
+            res.send(result)
         })
         .catch(err => {
             console.log(err)
@@ -109,7 +105,7 @@ const getOtherJobById = (req, res, next) => {
     Product.find({ _id: new ObjectId(job_id), type: "job" })
         .then((result) => {
             // console.log(réu)
-            res.send({ jobs: result })
+            res.send(result)
             // res.redirect('/homepage')
         })
         .catch(err => {

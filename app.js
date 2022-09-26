@@ -127,7 +127,7 @@ app.use(routerUser)
 
 mongoose.connect('mongodb+srv://quangthinhhigh:vladimir1@cluster0.ygznx4h.mongodb.net/Freelancer?retryWrites=true&w=majority')
 .then(() => {
-  app.listen(5000);
+  app.listen();
 })
 .catch(err => {
   console.log(err)

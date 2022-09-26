@@ -450,7 +450,7 @@ const getSpecificOrder = async (req, res, next) => {
     const specificOrder = await Order.findById(order_id).lean();
     console.log(specificOrder)
     if (!specificOrder) throw new Error('Can not find the order or it is not exist')
-    res.send({ order: specificOrder, message: "Get order successfully." })
+    res.send(specificOrder)
     return;
 }
 

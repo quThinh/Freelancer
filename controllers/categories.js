@@ -20,7 +20,7 @@ const createNew = (req, res, next) => {
     });
     categories.save()
         .then(() => {
-            console.log("create successfully")
+            res.send("create successfully")
         })
         .catch(err => {
             console.log(err)
@@ -31,7 +31,7 @@ const createNew = (req, res, next) => {
 const getAll = (req, res, next) => {
     Category.find()
         .then((result) => {
-            console.log(result)
+            res.send(result)
         })
         .catch(err => {
             console.log(err)
@@ -53,7 +53,7 @@ const deleteById = (req, res, next) => {
     const category_id = req.params.category_id
     User.deleteOne({_id: new ObjectId(category_id)})
         .then(() => {
-            console.log("delete successfully")
+            res.send("delete successfully")
         })
         .catch(err => {
             console.log(err + "loi roi")
@@ -79,7 +79,7 @@ const changeById = (req, res, next) => {
         return category.save();
     })
     .then(() => {
-        console.log("Update successfully")
+        res.send("Update successfully")
     })
     .catch((err) => {
         console.log(err)

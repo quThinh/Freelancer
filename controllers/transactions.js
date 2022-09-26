@@ -26,7 +26,7 @@ const external = async (req, res, next) => {
         .skip((page - 1) * limit)
         .limit(limit)
         .lean();
-    res.send({ externalTransaction: currentTransaction })
+    res.send(currentTransaction)
     return;
 }
 const internal = async (req, res, next) => {
@@ -52,7 +52,7 @@ const internal = async (req, res, next) => {
         .skip((page - 1) * limit)
         .limit(limit)
         .lean();
-    res.send({ internalTransaction: currentTransaction });
+    res.send(currentTransaction);
     return;
 }
 
@@ -153,7 +153,7 @@ const orderTransaction = async (req, res, next) => {
     const user_id = req.user_id;
     const order_id = req.params.order_id;
     if (user_type === 'admin') {
-        res.send(Transaction.find({ order_id: order_id, type: "INTERNAL" }).lean());
+        res.send(await Transaction.find({ order_id: order_id, type: "INTERNAL" }).lean());
         return;
     }
     const currentWallet = await wallet.findOne({ user_id });
