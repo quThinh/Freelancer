@@ -2,53 +2,140 @@ import { ObjectId } from 'mongodb';
 import Offer from '../models/offer.js';
 import user from '../models/user.js';
 import Product from '../models/productService.js'
+import { ForbiddenError } from 'routing-controllers';
+
+
+const UserModelUnselectableFields = [
+    'hashed_password',
+    'del_flag',
+    'active_token',
+    'api_key',
+];
 
 const createNew = async (req, res, next) => {
     const user_id = req.user_id;
     const job_id = req.params.job_id;
-    const job = await Product.findById(job_id)
+    const offer_price = req.body.offer_price;
+    const offer_finish_estimated_time = req.body.offer_finish_estimated_time;
+    const introduction = req.body.introduction;
+    const job = await Product.findById(job_id);
     if (job) {
-        const existing_offer = await Offer.findOne({ provider_id: user_id, job_id })
+        const existing_offer = await OfferModel.findOne({ provider_id: user_id, job_id })
+            .select({})
+            .lean();
         if (existing_offer) throw new Error('You already have an offer');
-        const provider_id = req.user_id;
-        const offer_price = req.body.offer_price;
-        const offer_finish_estimated_time = req.body.offer_finish_estimated_time;
-        const introduction = req.body.introduction;
-        const create_time = new Date();
         const offer = new Offer({
-            job_id: job_id,
-            provider_id: provider_id,
-            offer_price: offer_price,
-            offer_finish_estimated_time: offer_finish_estimated_time,
-            introduction: introduction,
-            create_time: create_time,
+            offer_price,
+            offer_finish_estimated_time,
+            introduction,
+            provider_id: user_id,
+            job_id,
         });
-        offer.save()
+        await offer.save()
             .then(() => {
-                res.send({ message: "Offer job successfully." })
+                res.send(offer);
+                return;
             })
-            .catch(err => {
-                res.send(err)
-            });
-        return offer;
+            .catch((err) => {
+                throw new Error(err);
+            })
     }
     throw new Error('Job not found');
 }
 
+
+const getOfferListWithProviderPopulate = async (
+    page,
+    limit,
+    query,
+    selectQuery,
+    sortBy
+) => {
+    if (sortBy) {
+        let sortMethod = 1;
+        let sortField = sortBy;
+
+        if (sortBy[0] === '-') {
+            sortMethod = -1;
+            sortField = sortBy.slice(1);
+        }
+        return Offer.find(query)
+            .select(selectQuery)
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort([[sortField, sortMethod]])
+            .populate({ path: 'provider_id', select: ['fullname'] })
+            .lean();
+    }
+    return Offer.find(query)
+        .select(selectQuery)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate({ path: 'provider_id', select: ['fullname'] })
+        .lean();
+}
+
+const getOfferListWithProductPopulate = async (
+    page,
+    limit,
+    query,
+    selectQuery,
+) => {
+    return Offer.find(query)
+        .select(selectQuery)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate({ path: 'provider_id', select: ['fullname'] })
+        .populate({ path: 'product_id', select: 'name description' })
+        .lean();
+}
+
 const getAllCurrentJob = async (req, res, next) => {
-    const job_id = req.params.job_id
-    const job = await Product.findById(job_id)
-    if (job) {
-        Offer.find({ job_id: new ObjectId(job_id) })
-            .then((offers) => {
-                res.send({ offers: offers, message: "Get all offers of this job successfully." })
-            })
-            .catch((err) => {
-                res.send(err)
-            })
+    const job_id = req.params.job_id;
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const select = req.query.select;
+    const sortBy = req.query.sortBy;
+    const user_id = req.user_id;
+    const user_type = req.user_type;
+    if (!page || !limit) {
+        res.send(null);
         return;
     }
-    throw new Error('Job not found')
+    try {
+        const selectQuery = {};
+        if (select) {
+            const fieldsArray = select.split(',');
+            fieldsArray.forEach((value) => {
+                if (!UserModelUnselectableFields.includes(value))
+                    selectQuery[value] = 1;
+            });
+        }
+        if (user_type === 'client') {
+            const desired_job = (await Product.findById(job_id)).toJSON();
+            const desired_user_id = await desired_job.user_id.toString();
+            if (desired_user_id === user_id.toString()) {
+                res.send(await getOfferListWithProviderPopulate(
+                    page,
+                    limit,
+                    { job_id: job_id },
+                    selectQuery,
+                    sortBy,
+                ));
+                return;
+            }
+            throw new ForbiddenError('You are not allowed to access to the offers');
+        }
+        res.send(getOfferListWithProductPopulate(
+            page,
+            limit,
+            { job_id: job_id },
+            selectQuery,
+        ));
+        return;
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
 const getAllUserOffer = (req, res, next) => {

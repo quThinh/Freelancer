@@ -94,13 +94,15 @@ const userSchema = new Schema({
         type: Number,
         required: false,
     },
-    social_media_contact: [{
+    social_media_contact: 
+        [{
         link: {
             type: String,
         },
         media: {
             type: String,
-        }
+        },
+        required: false,
     }],
 });
 

@@ -18,6 +18,7 @@ import routerUser from './routes/users.js'
 import {requireAuth, checkUser} from './middleware/authMiddleware.js'
 import dotenv from 'dotenv'
 import Agenda from 'agenda'
+import cors from 'cors';
 const agenda = new Agenda({db: {address: "mongodb+srv://quangthinhhigh:vladimir1@cluster0.ygznx4h.mongodb.net/Freelancer?retryWrites=true&w=majority"}})
 var app = express();
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 // app.use(bodyParser.json());
 // app.use(express.static(path.join(__dirname, 'public')));
 // const buffer = readFileSync(new URL('./public', import.meta.url));
@@ -37,10 +39,15 @@ app.get('/services/myService', checkUser);
 app.get('/services/myService/detail/:service_id', checkUser);
 app.put('/services/:service_id', checkUser);
 
-app.post('/jobs', checkUser);
-app.get('/jobs/myJob', checkUser);
-app.get('/jobs/myJob/detail/:job_id', checkUser);
-app.put('/jobs/:job_id', checkUser);
+app.post('/jobs', checkUser)
+app.get('/jobs', checkUser)
+app.get('/jobs/myjob', checkUser)
+app.get('/jobs/myjob/detail/:job_id', checkUser)
+app.get('/jobs/others/detail/:job_id', checkUser)
+app.put('/jobs/:job_id', checkUser)
+app.patch('/jobs/toggle/:job_id', checkUser)
+app.delete('/jobs/:job_id', checkUser)
+app.patch('/jobs/approve/:job_id', checkUser)
 
 app.get('/offers/:job_id', checkUser)
 app.post('/offers/:job_id', checkUser)
@@ -127,7 +134,7 @@ app.use(routerUser)
 
 mongoose.connect('mongodb+srv://quangthinhhigh:vladimir1@cluster0.ygznx4h.mongodb.net/Freelancer?retryWrites=true&w=majority')
 .then(() => {
-  app.listen();
+  app.listen(5000);
 })
 .catch(err => {
   console.log(err)

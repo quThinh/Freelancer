@@ -33,86 +33,24 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
 
 {
-    "email": "hihi",
-    "password": "hihi",
+    "email": "quangthinh0101@gmail.com",
+    "password": "hihihi",
     "phone": "stringstri",
     "fullname": "string"
 }
 ###
-POST http://localhost:5000/auth/login HTTP/1.1
+GET http://localhost:5000/services/myService
 Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI1NTMyMjYyNWE3ZmVhY2UwNjJmYzRiIiwiZW1haWwiOiJyb2NrZXRtZTE0M0BnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjY0MTk5NjgwLCJleHAiOjE2NjQyMzI1MjJ9.EyEvgF6jjay8El3aePGHhXLbZVapgic6w_gKv_KoR48
 
-{
-    "email": "kakakaka",
-    "password" : "kakakaka"
-}
+
 ###
 PATCH  http://localhost:5000/services/approve/631c7929cec6ad197135df4e HTTP/1.1
 Content-Type: application/json
 ###
-GET http://localhost:5000/offers
+GET http://localhost:5000/offers/62fc59b6f23abda15c2cd45f?limit=20&page=1&sortBy=create_time
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZGFmOTEzZTlhNWU3YzQ3OWQ5ZGMzIiwiZW1haWwiOiJsYWxhbGEiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYzNTU2MzE1LCJleHAiOjE2NjM1ODkxNTd9.u0ZwCJV-xjzClDU517pv8m2fdE7R1srpXuGIvEJMg28
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJhNDcyZmMwYzI2M2EwN2VkZTlhOTU3IiwiZW1haWwiOiJoYXN1bGUuZGVsbEBnbWFpbC5jb20iLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjY0MzQ2MzAyLCJleHAiOjE2NjQzNzkxNDR9.wXVaXkakXUhyilYcKTLkKh_XH--aiHBL4buqUxZdzls
 ###
-
-
-POST  http://localhost:5000/offers/6327f1f4dcd794e6a073f5b3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyM2ZlNGE5NTgwMzVkZTI0MzNmYmMxIiwiZW1haWwiOiJrYWtha2EiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYzNTYyMzA2LCJleHAiOjE2NjM1OTUxNDh9.cB0xEHsGc0U6hhDgpQLK0ApfZw9TV_sl0lOUHBKwtwo
-
-{
-  "offer_price": 24,
-  "offer_finish_estimated_time": 12,
-  "introduction": "intrssoduction"
-}
-###
-POST http://localhost:5000/order/acceptOffer/6327f253dcd794e6a073f5ba
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMxZGFmOTEzZTlhNWU3YzQ3OWQ5ZGMzIiwiZW1haWwiOiJsYWxhbGEiLCJyb2xlIjoiY2xpZW50IiwiaWF0IjoxNjYzNTUzMTU1LCJleHAiOjE2NjM1ODU5OTd9.ynEiFCF7C9F_0kG7prL07GraBhCIRielaXKhm9URydI
-
-{
-  "note":"lalala"
-}
-###
-POST  http://localhost:5000/user
-Content-Type: application/json
-
-{
-  "email": "hihi",
-  "password": "hihi",
-  "phone": "hihi",
-  "fullname": "hihi"
-}
-###
-PUT http://localhost:5000/users/change/profile
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMzMTIwZmI4NWYzOGZkMTY5OTYxNjkxIiwiZW1haWwiOiJoaWhpIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY2NDE2NDA5NSwiZXhwIjoxNjY0MTk2OTM3fQ.TeMlUlv5lcYIDdkP22vZAbK2kLsoqSn_qgVujj-oal8
-
-{
-  "phone": "string",
-  "fullname": "string",
-  "birthday": "Mon Sep 26 2022 10:29:27 GMT+0700 (Indochina Time)",
-  "address": "string",
-  "introduction": "string",
-  "category": [
-    "cecFbF24a20AbCd56cC52D68"
-  ],
-  "skill": [
-    {
-      "name": "string",
-      "slug": "string"
-    }
-  ],
-  "social_media_contact": [
-    {
-      "link": "string",
-      "media": "string"
-    }
-  ]
-}
-###
-GET  http://localhost:5000/orderComplain/order/6327f33edcd794e6a073f5c0
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjMyODQxODcxNGVhNDBmYWIyNDAyMWQ0IiwiZW1haWwiOiJrYWtha2FrYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDE4MjYzMCwiZXhwIjoxNjY0MjE1NDcyfQ.PQnGndJIsOtf8Dp1f8lH9AuG0FOFGzCJtYNMYD62qdo
 

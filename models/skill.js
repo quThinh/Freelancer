@@ -13,10 +13,6 @@ const skillSchema = new Schema({
         type: String,
         required: true,
     },
-    priority: {
-        type: String,
-        required: false,
-    }
 });
 
 export default mongoose.model('Skill', skillSchema) ;

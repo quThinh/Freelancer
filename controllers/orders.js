@@ -9,63 +9,130 @@ import Product from '../models/productService.js'
 import pkg from 'mongoose';
 import orderComplain from '../models/orderComplain.js';
 import { ProductStatus } from '../models/productStatus.js';
-import order from '../models/order.js';
 import productService from '../models/productService.js';
 const { startSession } = pkg;
+
+const getOrdersWithProviderPopulate = async (page,
+    limit,
+    query,
+    selectQuery) => {
+    return await Order.find(query)
+        .select(selectQuery)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate({ path: 'product_id', select: 'name description' })
+        .populate({ path: 'provider_id', select: 'fullname' })
+        .lean();
+}
+
+const getOrdersWithClientPopulate = async (page,
+    limit,
+    query,
+    selectQuery) => {
+    return await Order.find(query)
+        .select(selectQuery)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate({ path: 'product_id', select: 'name description' })
+        .populate({ path: 'client_id', select: 'fullname' })
+        .lean();
+}
+
 const getAllOrder = async (req, res, next) => {
     const role = req.query.role;
     const type = req.query.type;
-    const user_id = req.body.user_id;
-    // const status = req.query.status;
-    if (role === "client") {
-        if (type === "job") {
-            Order.find({ client_id: user_id, type: "job" })
-                .then((result) => {
-                    res.status(200).send({ order: result, message: "Get job successfully." })
-                    return;
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-            return;
-        }
-        else if (type === "service") {
-            Order.find({ client_id: user_id, type: "service" })
-                .then((result) => {
-                    res.status(200).send({ order: result, message: "Get job successfully." })
-                    return;
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-            return;
-        }
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const select = req.query.select;
+    const status = req.query.status;
+    const user_id = req.user_id;
+    const selectQuery = {};
+    if (select) {
+        const fieldsArray = select.split(',');
+        fieldsArray.forEach((value) => {
+            selectQuery[value] = 1;
+        });
     }
-    else if (role === "provider") {
-        if (type === "job") {
-            Order.find({ provider_id: user_id, type: "job" })
-                .then((result) => {
-                    res.status(200).send({ order: result, message: "Get job successfully." })
-                    return;
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+    if (role === 'client') {
+        selectQuery['client_id'] = 0;
+        if (status) {
+            if (type === 'job') {
+                res.send(await getOrdersWithProviderPopulate(
+                    page,
+                    limit,
+                    {
+                        client_id: user_id,
+                        status: { $in: status.split(',').map((x) => +x) },
+                        type: "job",
+                    },
+                    selectQuery,
+                ));
+                return;
+            }
+            if (type === 'service') {
+                res.send(await getOrdersWithProviderPopulate(
+                    page,
+                    limit,
+                    {
+                        client_id: user_id,
+                        status: { $in: status.split(',').map((x) => +x) },
+                        type: "service",
+                    },
+                    selectQuery,
+                ));
+                return;
+            }
+            res.send(await getOrdersWithProviderPopulate(
+                page,
+                limit,
+                {
+                    client_id: user_id,
+                    status: { $in: status.split(',').map((x) => +x) },
+                },
+                selectQuery,
+            ));
             return;
         }
-        else if (type === "service") {
-            Order.find({ provider_id: user_id, type: "service" })
-                .then((result) => {
-                    res.status(200).send({ order: result, message: "Get job successfully." })
-                    return;
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+        res.send(await getOrdersWithProviderPopulate(
+            page,
+            limit,
+            {
+                client_id: user_id,
+                type: type || { $in: ["job", "service"] },
+            },
+            selectQuery,
+        ));
+        return;
+    } else if (role === 'provider') {
+        selectQuery['provider_id'] = 0;
+        if (status) {
+            res.send(await getOrdersWithClientPopulate(
+                page,
+                limit,
+                {
+                    provider_id: user_id,
+                    status: { $in: status.split(',').map((x) => +x) },
+                    type: type || { $in: ["job", "service"] },
+                },
+                selectQuery,
+            ));
             return;
         }
+        console.log(type, role)
+        res.send(await getOrdersWithClientPopulate(
+            page,
+            limit,
+            {
+                provider_id: user_id,
+                type: type || { $in: ["job", "service"] },
+            },
+            selectQuery,
+        ));
+        return;
     }
-    throw new Error('Job not found');
+    throw new Error(
+        'You did not specify role or do not have permision to get this order',
+    );
 }
 
 const acceptOffer = async (req, res, next) => {
@@ -578,7 +645,7 @@ const finishMentor = async (req, res, next) => {
             await agenda.schedule('in 72 hours', 'auto complete order', order_id);
             await Order.findByIdAndUpdate(
                 order_id,
-                {status: 2},
+                { status: 2 },
             );
             res.send("Finished the order, wait for the client.")
             return;

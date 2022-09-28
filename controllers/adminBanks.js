@@ -50,7 +50,7 @@ const createAdminBank = async (req, res, next) => {
             account_number,
             account_name,
         })
-        res.send({adminBank: currentAdminBank, message: "Create admin bank successfully."})
+        res.send(currentAdminBank)
         return;
     }
     throw new Error('You do not have permission to create an admin bank')

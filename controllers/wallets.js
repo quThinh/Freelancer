@@ -10,7 +10,7 @@ const myWallet = async (req, res, next) => {
   const user_id = req.user_id;
   if (user_type === "client") {
     const myWallet = await Wallet.findOne({ user_id }).lean().populate('user_id', 'fullname');
-    res.send({ myWallet: myWallet, message: "get my wallet successfully." })
+    res.send(myWallet)
     return;
   }
   throw new Error('you are admin, you can not view your wallet')
@@ -21,7 +21,7 @@ const getSpecificUserWallet = async (req, res, next) => {
   const user_id = req.user_id;
   if (user_type === 'admin') {
     const userWallet = await Wallet.findOne({ user_id }).lean().populate('user_id', 'fullname');
-    res.send({ userWallet: userWallet, message: "get user's wallet successfully." })
+    res.send(userWallet)
     return;
   }
   throw new Error('you do not have permission to view this wallet');

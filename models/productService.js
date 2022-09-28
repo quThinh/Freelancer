@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
+import { stringify } from "uuid";
+import skill from "./skill.js";
 
-const {Schema} = mongoose
+
+const { Schema } = mongoose
 const productSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         required: true,
     },
     name: {
@@ -13,14 +16,14 @@ const productSchema = new Schema({
     },
     category: {
         type: [Schema.Types.ObjectId],
-        ref: "category",
-        required: true,
+        ref: "Category",
+        required: false,
     },
-    skill: {
-        type: [Schema.Types.ObjectId],
-        ref: "skill",
-        required: true,
-    },
+    skill: [{
+        name: {type: String},
+        slug: {type: String},
+        image: {type: String, required: false},
+    }],
     providing_method: {
         type: [String],
         required: true,
@@ -53,7 +56,6 @@ const productSchema = new Schema({
     },
     expiration_time: {
         type: Date,
-        required: true,
     },
     image: {
         type: [String],
@@ -61,7 +63,7 @@ const productSchema = new Schema({
     },
     description: {
         type: String,
-        required: true,
+        required: false,
     },
     sold_time: {
         type: Number,
@@ -86,6 +88,10 @@ const productSchema = new Schema({
         type: String,
         required: false,
     },
+    slug: {
+        type: String,
+        required: true,
+    }
 });
 
-export default mongoose.model('product', productSchema) ;
+export default mongoose.model('product', productSchema);
